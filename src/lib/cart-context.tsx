@@ -13,10 +13,16 @@ export type CartItem = {
   title: string;
   imageUrl: string;
   priceCents: number;
+  // Used to group the cart by seller and cap quantity client-side; the
+  // checkout route re-validates both against the database.
+  storeName: string;
+  storeSlug: string;
+  stock: number;
   quantity: number;
 };
 
-const STORAGE_KEY = "8x-amazon-clone:cart";
+const STORAGE_KEY = "ebazar:cart";
+const MAX_PER_ITEM = 20;
 const EMPTY_ITEMS: CartItem[] = [];
 
 type Listener = () => void;
@@ -28,7 +34,11 @@ function createCartStore() {
   if (typeof window !== "undefined") {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) items = JSON.parse(raw);
+      const parsed = raw ? JSON.parse(raw) : [];
+      // Drop entries from older cart shapes rather than crash on them.
+      if (Array.isArray(parsed)) {
+        items = parsed.filter((i) => i && typeof i.storeSlug === "string");
+      }
     } catch {
       // ignore malformed/blocked storage
     }
@@ -60,14 +70,15 @@ function createCartStore() {
       return EMPTY_ITEMS;
     },
     addItem(item: Omit<CartItem, "quantity">, quantity = 1) {
+      const cap = Math.min(item.stock, MAX_PER_ITEM);
       const existing = items.find((i) => i.productId === item.productId);
       items = existing
         ? items.map((i) =>
             i.productId === item.productId
-              ? { ...i, quantity: i.quantity + quantity }
+              ? { ...i, ...item, quantity: Math.min(i.quantity + quantity, cap) }
               : i
           )
-        : [...items, { ...item, quantity }];
+        : [...items, { ...item, quantity: Math.min(quantity, cap) }];
       emit();
     },
     removeItem(productId: string) {
@@ -79,7 +90,9 @@ function createCartStore() {
         quantity <= 0
           ? items.filter((i) => i.productId !== productId)
           : items.map((i) =>
-              i.productId === productId ? { ...i, quantity } : i
+              i.productId === productId
+                ? { ...i, quantity: Math.min(quantity, i.stock, MAX_PER_ITEM) }
+                : i
             );
       emit();
     },
