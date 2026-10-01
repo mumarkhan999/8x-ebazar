@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { and, count, eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { categories, products, reviews, stores, users } from "@/db/schema";
 import { assertAdmin } from "@/lib/dal";

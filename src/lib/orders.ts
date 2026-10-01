@@ -15,7 +15,7 @@ const fullOrder = {
       orderBy: [asc(subOrders.createdAt)],
       with: {
         store: { columns: { name: true, slug: true } },
-        items: true,
+        items: { with: { product: { columns: { slug: true } } } },
       },
     },
   },

@@ -82,7 +82,9 @@ export async function POST(request: Request) {
       shippingPhone,
       shippingAddress,
     }),
-    db.insert(subOrders).values(subRows.map(({ group: _group, ...row }) => row)),
+    db.insert(subOrders).values(
+      subRows.map((s) => ({ id: s.id, orderId: s.orderId, storeId: s.storeId, subtotalCents: s.subtotalCents }))
+    ),
     db.insert(orderItems).values(
       subRows.flatMap((sub) =>
         sub.group.map((l) => ({
