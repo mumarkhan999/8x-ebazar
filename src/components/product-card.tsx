@@ -40,7 +40,7 @@ export function ProductCard({ product, priority }: { product: ProductCardData; p
           {product.title}
         </h3>
         <div className="mt-auto space-y-1 pt-1">
-          <Price priceCents={product.priceCents} compareAtCents={product.compareAtCents} />
+          <Price priceCents={product.priceCents} compareAtCents={product.compareAtCents} showPercent={false} />
           <div className="flex items-center justify-between gap-2">
             <RatingSummary rating={product.ratingAvg} count={product.reviewCount} />
             {product.soldCount > 0 && (

@@ -11,7 +11,7 @@ export async function SiteHeader({ query = "" }: { query?: string }) {
 
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:gap-6">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-3 sm:flex-nowrap sm:gap-6">
         <Logo />
 
         <form action="/search" role="search" className="order-last w-full sm:order-none sm:flex-1">
