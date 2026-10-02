@@ -89,15 +89,42 @@ export type ListFilters = {
 
 export type ProductCardData = Awaited<ReturnType<typeof getDeals>>[number];
 
+const likeTerm = (word: string) => `%${word.replace(/[%_\\]/g, "\\$&")}%`;
+
+function searchTerms(q: string) {
+  return q.trim().split(/\s+/).filter(Boolean).slice(0, 6);
+}
+
+/**
+ * Every word must match somewhere: the product's title or description, its
+ * category or parent department, or its store's name. So "voltline" finds a
+ * store's products, "fitness" a whole category, and "wireless headphones"
+ * doesn't need the exact phrase.
+ */
+function searchCondition(q: string) {
+  const perWord = searchTerms(q).map((word) => {
+    const term = likeTerm(word);
+    return or(
+      ilike(products.title, term),
+      ilike(products.description, term),
+      sql`${products.categoryId} in (
+        select c.id from ${categories} c
+        left join ${categories} parent on parent.id = c.parent_id
+        where c.name ilike ${term} or parent.name ilike ${term}
+      )`,
+      sql`${products.storeId} in (select s.id from ${stores} s where s.name ilike ${term})`
+    )!;
+  });
+  return perWord.length ? and(...perWord) : undefined;
+}
+
 export async function listProducts(filters: ListFilters = {}) {
   const pageSize = filters.pageSize ?? 24;
   const page = Math.max(1, filters.page ?? 1);
 
   const conditions: SQL[] = [isVisible];
-  if (filters.q) {
-    const term = `%${filters.q.replace(/[%_]/g, "\\$&")}%`;
-    conditions.push(or(ilike(products.title, term), ilike(products.description, term))!);
-  }
+  const search = filters.q ? searchCondition(filters.q) : undefined;
+  if (search) conditions.push(search);
   if (filters.categoryIds?.length) {
     conditions.push(inArray(products.categoryId, filters.categoryIds));
   }
@@ -235,6 +262,27 @@ export async function getStoreStats(storeId: string) {
     .from(products)
     .where(and(eq(products.storeId, storeId), isVisible));
   return row;
+}
+
+// Shortcuts shown above search results: stores and categories whose names
+// match the whole query.
+export async function searchStoresAndCategories(q: string) {
+  const term = likeTerm(q.trim());
+  const [matchedStores, tree] = await Promise.all([
+    db.query.stores.findMany({
+      where: and(eq(stores.status, "active"), ilike(stores.name, term)),
+      columns: { name: true, slug: true, logoUrl: true },
+      limit: 4,
+    }),
+    getCategoryTree(),
+  ]);
+  const needle = q.trim().toLowerCase();
+  const matchedCategories = tree
+    .flatMap((root) => [{ ...root, parentName: null as string | null }, ...root.children.map((c) => ({ ...c, parentName: root.name }))])
+    .filter((c) => c.name.toLowerCase().includes(needle))
+    .slice(0, 6)
+    .map(({ name, slug, parentName }) => ({ name, slug, parentName }));
+  return { stores: matchedStores, categories: matchedCategories };
 }
 
 export async function getFeaturedStores(limit = 6) {

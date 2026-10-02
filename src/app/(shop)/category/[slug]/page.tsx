@@ -30,7 +30,17 @@ export default async function CategoryPage(props: PageProps<"/category/[slug]">)
         <span className="mx-1.5">/</span>
         <span className="text-ink-soft">{category.name}</span>
       </nav>
-      <PageTitle eyebrow={parent ? parent.name : "Department"} title={category.name} />
+      <PageTitle eyebrow={parent ? parent.name : "Department"} title={category.name}>
+        <form action={`/category/${slug}`} role="search" className="w-full sm:w-72">
+          <input
+            name="q"
+            defaultValue={typeof searchParams.q === "string" ? searchParams.q : ""}
+            placeholder={`Search in ${category.name}`}
+            aria-label={`Search in ${category.name}`}
+            className="input !rounded-full !py-2"
+          />
+        </form>
+      </PageTitle>
       <Listing
         basePath={`/category/${slug}`}
         searchParams={searchParams}
