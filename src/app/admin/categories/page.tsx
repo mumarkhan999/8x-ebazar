@@ -4,6 +4,7 @@ import { listCategoriesForAdmin } from "@/lib/admin";
 import { deleteCategory } from "@/lib/actions/admin";
 import { PageTitle } from "@/components/ui";
 import { CategoryForm } from "./category-form";
+import { SubmitButton } from "@/components/submit-button";
 
 export const metadata: Metadata = { title: "Categories · Admin" };
 
@@ -27,7 +28,7 @@ export default async function AdminCategoriesPage() {
                   </div>
                   {total === 0 && dept.children.length === 0 && (
                     <form action={deleteCategory.bind(null, dept.id)}>
-                      <button className="btn btn-danger btn-sm">Delete</button>
+                      <SubmitButton className="btn btn-danger btn-sm">Delete</SubmitButton>
                     </form>
                   )}
                 </header>
@@ -41,7 +42,7 @@ export default async function AdminCategoriesPage() {
                         <span className="text-xs text-muted">{c.productCount} products</span>
                         {c.productCount === 0 && (
                           <form action={deleteCategory.bind(null, c.id)}>
-                            <button className="text-xs font-semibold text-rose-600 hover:underline">Delete</button>
+                            <SubmitButton className="text-xs font-semibold text-rose-600 hover:underline">Delete</SubmitButton>
                           </form>
                         )}
                       </span>

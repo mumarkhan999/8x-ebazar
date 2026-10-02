@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Logo } from "@/components/logo";
 import { logout } from "@/lib/actions/auth";
 import { ConsoleNav } from "@/components/console-nav";
+import { SubmitButton } from "@/components/submit-button";
 
 export function ConsoleShell({
   badge,
@@ -30,7 +31,7 @@ export function ConsoleShell({
           <div className="mt-2 flex items-center gap-3 text-xs">
             <Link href="/" className="font-semibold text-jade-700 hover:underline">← Storefront</Link>
             <form action={logout}>
-              <button className="text-muted hover:text-ink">Log out</button>
+              <SubmitButton className="inline-flex items-center gap-1.5 text-muted hover:text-ink">Log out</SubmitButton>
             </form>
           </div>
         </div>

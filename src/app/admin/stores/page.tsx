@@ -7,6 +7,7 @@ import { formatDate } from "@/lib/format";
 import { storeStatus, type StoreStatus } from "@/db/schema";
 import { EmptyState, PageTitle, StatusBadge } from "@/components/ui";
 import { ProductImage } from "@/components/product-image";
+import { SubmitButton } from "@/components/submit-button";
 
 export const metadata: Metadata = { title: "Stores · Admin" };
 
@@ -68,23 +69,23 @@ export default async function AdminStoresPage(props: PageProps<"/admin/stores">)
               {s.status === "pending" && (
                 <div className="mt-4 flex flex-wrap items-end gap-3 border-t border-line pt-4">
                   <form action={reviewStore.bind(null, s.id, "approve")}>
-                    <button className="btn btn-primary">Approve store</button>
+                    <SubmitButton className="btn btn-primary">Approve store</SubmitButton>
                   </form>
                   <form action={reviewStore.bind(null, s.id, "reject")} className="flex flex-1 flex-wrap gap-2">
                     <input name="note" required placeholder="Reason for rejection (shown to the applicant)" className="input min-w-60 flex-1" />
-                    <button className="btn btn-danger">Reject</button>
+                    <SubmitButton className="btn btn-danger">Reject</SubmitButton>
                   </form>
                 </div>
               )}
               {s.status === "active" && (
                 <form action={reviewStore.bind(null, s.id, "suspend")} className="mt-4 flex flex-wrap gap-2 border-t border-line pt-4">
                   <input name="note" required placeholder="Reason for suspension (hides all listings)" className="input min-w-60 flex-1" />
-                  <button className="btn btn-danger">Suspend store</button>
+                  <SubmitButton className="btn btn-danger">Suspend store</SubmitButton>
                 </form>
               )}
               {s.status === "suspended" && (
                 <form action={reviewStore.bind(null, s.id, "reinstate")} className="mt-4 border-t border-line pt-4">
-                  <button className="btn btn-outline">Reinstate store</button>
+                  <SubmitButton className="btn btn-outline">Reinstate store</SubmitButton>
                 </form>
               )}
             </li>

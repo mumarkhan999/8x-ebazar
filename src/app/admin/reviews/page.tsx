@@ -6,6 +6,7 @@ import { setReviewHidden } from "@/lib/actions/admin";
 import { formatDate } from "@/lib/format";
 import { Badge, EmptyState, PageTitle } from "@/components/ui";
 import { Stars } from "@/components/rating";
+import { SubmitButton } from "@/components/submit-button";
 
 export const metadata: Metadata = { title: "Reviews · Admin" };
 
@@ -53,7 +54,7 @@ export default async function AdminReviewsPage(props: PageProps<"/admin/reviews"
                 </Link>
               </div>
               <form action={setReviewHidden.bind(null, r.id, !r.hidden)}>
-                <button className={r.hidden ? "btn btn-outline btn-sm" : "btn btn-danger btn-sm"}>{r.hidden ? "Restore" : "Hide"}</button>
+                <SubmitButton className={r.hidden ? "btn btn-outline btn-sm" : "btn btn-danger btn-sm"}>{r.hidden ? "Restore" : "Hide"}</SubmitButton>
               </form>
             </li>
           ))}

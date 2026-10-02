@@ -7,6 +7,7 @@ import { formatPrice } from "@/lib/format";
 import { productStatus, type ProductStatus } from "@/db/schema";
 import { EmptyState, PageTitle, StatusBadge } from "@/components/ui";
 import { ProductImage } from "@/components/product-image";
+import { SubmitButton } from "@/components/submit-button";
 
 export const metadata: Metadata = { title: "Products · Admin" };
 
@@ -69,9 +70,9 @@ export default async function AdminProductsPage(props: PageProps<"/admin/product
                   <td className="px-3 py-3 text-right font-semibold">{formatPrice(p.priceCents)}</td>
                   <td className="px-5 py-3 text-right">
                     <form action={setProductBlocked.bind(null, p.id, p.status !== "blocked")}>
-                      <button className={p.status === "blocked" ? "btn btn-outline btn-sm" : "btn btn-danger btn-sm"}>
+                      <SubmitButton className={p.status === "blocked" ? "btn btn-outline btn-sm" : "btn btn-danger btn-sm"}>
                         {p.status === "blocked" ? "Unblock" : "Block"}
-                      </button>
+                      </SubmitButton>
                     </form>
                   </td>
                 </tr>

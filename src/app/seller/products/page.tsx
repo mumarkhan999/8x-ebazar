@@ -7,6 +7,7 @@ import { formatPrice } from "@/lib/format";
 import { productStatus, type ProductStatus } from "@/db/schema";
 import { EmptyState, PageTitle, StatusBadge } from "@/components/ui";
 import { ProductImage } from "@/components/product-image";
+import { SubmitButton } from "@/components/submit-button";
 
 export const metadata: Metadata = { title: "Products · Seller Center" };
 
@@ -87,12 +88,12 @@ export default async function SellerProductsPage(props: PageProps<"/seller/produ
                       )}
                       {p.status !== "blocked" && (
                         <form action={setProductPublished.bind(null, p.id, p.status === "draft")}>
-                          <button className="btn btn-outline btn-sm">{p.status === "draft" ? "Publish" : "Unpublish"}</button>
+                          <SubmitButton className="btn btn-outline btn-sm">{p.status === "draft" ? "Publish" : "Unpublish"}</SubmitButton>
                         </form>
                       )}
                       <Link href={`/seller/products/${p.id}/edit`} className="btn btn-outline btn-sm">Edit</Link>
                       <form action={deleteProduct.bind(null, p.id)}>
-                        <button className="btn btn-danger btn-sm" title="Products with orders are unpublished instead of deleted">Delete</button>
+                        <SubmitButton className="btn btn-danger btn-sm" title="Products with orders are unpublished instead of deleted">Delete</SubmitButton>
                       </form>
                     </div>
                   </td>

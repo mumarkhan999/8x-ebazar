@@ -4,6 +4,7 @@ import { getCategoryTree } from "@/lib/catalog";
 import { logout } from "@/lib/actions/auth";
 import { Logo } from "@/components/logo";
 import { CartLink } from "@/components/cart-link";
+import { SubmitButton } from "@/components/submit-button";
 
 export async function SiteHeader({ query = "" }: { query?: string }) {
   const [user, tree] = await Promise.all([getCurrentUser(), getCategoryTree()]);
@@ -63,9 +64,9 @@ export async function SiteHeader({ query = "" }: { query?: string }) {
                   )}
                 </div>
                 <form action={logout} className="border-t border-line pt-1.5">
-                  <button className="w-full rounded-lg px-3 py-2 text-left text-muted hover:bg-paper hover:text-ink">
+                  <SubmitButton className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-muted hover:bg-paper hover:text-ink">
                     Log out
-                  </button>
+                  </SubmitButton>
                 </form>
               </div>
             </details>

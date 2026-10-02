@@ -8,6 +8,7 @@ import { formatDate, formatPrice, shortId } from "@/lib/format";
 import { OrderTracker } from "@/components/order-tracker";
 import { ProductImage } from "@/components/product-image";
 import { StatusBadge } from "@/components/ui";
+import { SubmitButton } from "@/components/submit-button";
 
 export const metadata: Metadata = { title: "Order · Seller Center" };
 
@@ -44,9 +45,9 @@ export default async function SellerOrderPage(props: PageProps<"/seller/orders/[
           <div className="mt-5 flex flex-wrap gap-2 border-t border-line pt-4">
             {next.map((status) => (
               <form key={status} action={updateSubOrderStatus.bind(null, sub.id, status)}>
-                <button className={status === "cancelled" ? "btn btn-danger" : "btn btn-primary"}>
+                <SubmitButton className={status === "cancelled" ? "btn btn-danger" : "btn btn-primary"}>
                   {ACTION_LABEL[status as keyof typeof ACTION_LABEL]}
-                </button>
+                </SubmitButton>
               </form>
             ))}
           </div>
