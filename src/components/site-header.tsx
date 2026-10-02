@@ -5,6 +5,7 @@ import { logout } from "@/lib/actions/auth";
 import { Logo } from "@/components/logo";
 import { CartLink } from "@/components/cart-link";
 import { SubmitButton } from "@/components/submit-button";
+import { MobileMenu } from "@/components/mobile-menu";
 
 export async function SiteHeader({ query = "" }: { query?: string }) {
   const [user, tree] = await Promise.all([getCurrentUser(), getCategoryTree()]);
@@ -13,7 +14,10 @@ export async function SiteHeader({ query = "" }: { query?: string }) {
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-3 sm:flex-nowrap sm:gap-6">
-        <Logo />
+        <div className="flex items-center gap-1">
+          <MobileMenu tree={tree} showSell={!sellerLive && user?.role !== "admin"} />
+          <Logo />
+        </div>
 
         <form action="/search" role="search" className="order-last w-full sm:order-none sm:flex-1">
           <label className="relative block">
@@ -80,8 +84,9 @@ export async function SiteHeader({ query = "" }: { query?: string }) {
         </nav>
       </div>
 
-      <div className="border-t border-line">
-        <ul className="scrollbar-none mx-auto flex max-w-7xl items-center gap-1 overflow-x-auto px-4 text-sm lg:overflow-visible">
+      {/* Desktop department bar; below lg it lives in the hamburger menu. */}
+      <div className="hidden border-t border-line lg:block">
+        <ul className="mx-auto flex max-w-7xl items-center gap-1 px-4 text-sm">
           <li>
             <Link href="/deals" className="flex items-center gap-1.5 whitespace-nowrap px-3 py-2.5 font-semibold text-saffron-700 hover:text-ink">
               <span className="h-1.5 w-1.5 rounded-full bg-saffron-400" />
