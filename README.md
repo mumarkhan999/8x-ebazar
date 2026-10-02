@@ -2,7 +2,7 @@
 
 A multi-vendor marketplace: independent sellers apply to open a store, an admin approves them, and shoppers buy from many stores in one checkout. Each store then fulfils its own part of the order.
 
-Built for the 8x take-home. The original brief was an Amazon clone; it was later changed to "keep the idea and the backend, design your own interface". The backend from that first version (Neon Postgres, Drizzle, Auth.js, Stripe) was carried over and extended for multiple vendors. The UI was rebuilt from scratch with its own visual identity.
+Built for the 8x take-home. The brief was later revised to "keep the idea and the backend, design your own interface". The backend from the first version (Neon Postgres, Drizzle, Auth.js, Stripe) was carried over and extended for multiple vendors. The UI was rebuilt from scratch with its own visual identity.
 
 **Stack:** Next.js 16 (App Router, Server Components, Server Actions) · TypeScript · Tailwind CSS v4 · Neon serverless Postgres · Drizzle ORM · Auth.js v5 (credentials, JWT) · Stripe Checkout (test mode) · Cloudinary (optional image uploads)
 
